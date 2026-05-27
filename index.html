@@ -67,7 +67,7 @@ img{max-width:100%;display:block}
 .sec-acts{padding:0 18px}
 
 /* ACTIVITY CARD */
-.ac{background:#fff;border-radius:14px;box-shadow:0 1px 4px rgba(0,0,0,.06),0 4px 12px rgba(0,0,0,.06);margin-bottom:10px;overflow:hidden}
+.ac{background:#fff;border-radius:14px;box-shadow:0 1px 4px rgba(0,0,0,.06),0 4px 12px rgba(0,0,0,.06);margin-bottom:10px;overflow:hidden;transition:background-color 0.5s ease}
 .ac-photo{width:100%;height:160px;object-fit:cover}
 .ac-body{padding:13px}
 .ac-title{font-size:15px;font-weight:700;margin-bottom:2px;color:#1A1A1A}
@@ -105,7 +105,7 @@ img{max-width:100%;display:block}
 .cday.om .cdate{color:#9A9A9A}
 .cdate{font-size:11px;font-weight:500;width:20px;height:20px;display:flex;align-items:center;justify-content:center;margin-bottom:1px}
 .cpills{display:flex;flex-direction:column;gap:1px}
-.cpill{font-size:8px;font-weight:600;padding:1px 3px;border-radius:3px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.cpill{font-size:8px;font-weight:600;padding:1px 3px;border-radius:3px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;cursor:pointer}
 
 /* MAP */
 #map-container{margin:0;background:#e8f4f0}
@@ -203,8 +203,8 @@ img{max-width:100%;display:block}
     <div class="phr"><div class="lt"><button id="en1" class="active" onclick="setL('en')">EN</button><button id="da1" onclick="setL('da')">DA</button></div></div>
   </div>
   <div style="padding:10px 18px;display:flex;gap:8px;border-bottom:1px solid #E5E3DC">
-    <select class="fsel" id="df-year" onchange="rDash()"><option value="">All Years</option></select>
-    <select class="fsel" id="df-student" onchange="rDash()"><option value="">All Students</option></select>
+    <select class="fsel" id="df-year" onchange="rDash()"><option value="" id="opt-all-years">All Years</option></select>
+    <select class="fsel" id="df-student" onchange="rDash()"><option value="" id="opt-all-students-d">All Students</option></select>
   </div>
   <div class="stats-grid" id="dash-stats"></div>
   <div class="chart-card"><h3 id="t-by-sub">Completed Lessons by Subject</h3><div id="dash-chart"></div></div>
@@ -222,14 +222,14 @@ img{max-width:100%;display:block}
   <div class="act-ctrl">
     <div class="sw"><span class="sico2">&#128269;</span><input class="si" id="search" placeholder="Search activities..." oninput="rActs()"></div>
     <div class="fr">
-      <select class="fsel" id="f-student" onchange="rActs()"><option value="">All Students</option></select>
+      <select class="fsel" id="f-student" onchange="rActs()"><option value="" id="opt-all-students-a">All Students</option></select>
       <select class="fsel" id="f-status" onchange="rActs()">
-        <option value="">All Status</option>
-        <option value="Completed">Completed</option>
-        <option value="In Progress">In Progress</option>
-        <option value="Planned">Planned</option>
+        <option value="" id="opt-all-status">All Status</option>
+        <option value="Completed" id="opt-comp">Completed</option>
+        <option value="In Progress" id="opt-inp">In Progress</option>
+        <option value="Planned" id="opt-plan">Planned</option>
       </select>
-      <select class="fsel" id="f-subject" onchange="rActs()"><option value="">All Subjects</option></select>
+      <select class="fsel" id="f-subject" onchange="rActs()"><option value="" id="opt-all-subjects">All Subjects</option></select>
     </div>
   </div>
   <div class="act-list" id="act-list"></div>
@@ -287,14 +287,14 @@ img{max-width:100%;display:block}
   <div class="exp-content">
     <div class="exp-sec">
       <h3>&#128196; <span id="t-epdf">Export PDF</span></h3>
-      <div class="fg"><label class="fl">Student</label><select class="fsel2" id="exp-st"><option value="">All Students</option></select></div>
+      <div class="fg"><label class="fl" id="lbl-exp-st">Student</label><select class="fsel2" id="exp-st"><option value="" id="opt-all-students-e">All Students</option></select></div>
       <div class="fg"><label class="fl" id="t-edr">Date Range</label>
         <select class="fsel2" id="exp-range">
-          <option value="6">Last 6 months</option>
-          <option value="3">Last 3 months</option>
-          <option value="1">Last month</option>
-          <option value="12">Last 12 months</option>
-          <option value="0">All time</option>
+          <option value="6" id="opt-r6">Last 6 months</option>
+          <option value="3" id="opt-r3">Last 3 months</option>
+          <option value="1" id="opt-r1">Last month</option>
+          <option value="12" id="opt-r12">Last 12 months</option>
+          <option value="0" id="opt-rAll">All time</option>
         </select>
       </div>
       <div class="fg">
@@ -333,31 +333,31 @@ img{max-width:100%;display:block}
     <div class="mhdr"><h2 id="act-modal-ttl">Create Activity</h2><button class="mcls" onclick="closeM('m-act')">x</button></div>
     <div class="mbody">
       <input type="hidden" id="act-id">
-      <div class="fg"><label class="fl">Student</label><select class="fsel2" id="act-st"><option value="">Select student</option></select></div>
-      <div class="fg"><label class="fl">Title</label><input class="fi" id="act-title" placeholder="Activity title"></div>
-      <div class="fg"><label class="fl">Subjects</label><div class="sg" id="sg"></div>
-        <div class="csr"><input id="csi" placeholder="Custom subject..."><button onclick="addCS()">Add</button></div>
+      <div class="fg"><label class="fl" id="lbl-act-st">Student</label><select class="fsel2" id="act-st"><option value="" id="opt-sel-st">Select student</option></select></div>
+      <div class="fg"><label class="fl" id="lbl-act-title">Title</label><input class="fi" id="act-title" placeholder="Activity title"></div>
+      <div class="fg"><label class="fl" id="lbl-act-subs">Subjects</label><div class="sg" id="sg"></div>
+        <div class="csr"><input id="csi" placeholder="Custom subject..."><button onclick="addCS()" id="btn-act-add-sub">Add</button></div>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-        <div class="fg"><label class="fl">Status</label>
+        <div class="fg"><label class="fl" id="lbl-act-status">Status</label>
           <select class="fsel2" id="act-status">
-            <option value="Planned">Planned</option>
-            <option value="In Progress">In Progress</option>
-            <option value="Completed">Completed</option>
+            <option value="Planned" id="opt-act-p">Planned</option>
+            <option value="In Progress" id="opt-act-i">In Progress</option>
+            <option value="Completed" id="opt-act-c">Completed</option>
           </select>
         </div>
-        <div class="fg"><label class="fl">Duration (hours)</label><input class="fi" id="act-dur" type="number" min="0.5" step="0.5" value="1"></div>
+        <div class="fg"><label class="fl" id="lbl-act-dur">Duration (hours)</label><input class="fi" id="act-dur" type="number" min="0.5" step="0.5" value="1"></div>
       </div>
-      <div class="fg"><label class="fl">Date</label><input class="fi" id="act-date" type="date"></div>
-      <div class="fg"><label class="fl">Description</label><textarea class="fta" id="act-desc" placeholder="What did you cover? Notes, observations..."></textarea></div>
+      <div class="fg"><label class="fl" id="lbl-act-date">Date</label><input class="fi" id="act-date" type="date"></div>
+      <div class="fg"><label class="fl" id="lbl-act-desc">Description</label><textarea class="fta" id="act-desc" placeholder="What did you cover? Notes, observations..."></textarea></div>
       <div class="fg">
-        <label class="fl">Photos</label>
-        <div class="pua" onclick="document.getElementById('pi').click()">Add photos</div>
+        <label class="fl" id="lbl-act-photos">Photos</label>
+        <div class="pua" onclick="document.getElementById('pi').click()" id="lbl-act-add-p">Add photos</div>
         <input type="file" id="pi" accept="image/*" multiple style="display:none" onchange="hPhotos(event)">
         <div class="pthumbs" id="pthumbs"></div>
       </div>
     </div>
-    <div class="mfoot"><button class="btn-cancel" onclick="closeM('m-act')">Cancel</button><button class="btn-save" onclick="saveAct()">Save Activity</button></div>
+    <div class="mfoot"><button class="btn-cancel" onclick="closeM('m-act')" id="btn-act-cnl">Cancel</button><button class="btn-save" onclick="saveAct()" id="btn-act-save">Save Activity</button></div>
   </div>
 </div>
 
@@ -369,43 +369,47 @@ img{max-width:100%;display:block}
       <input type="hidden" id="st-id">
       <div class="fg" style="text-align:center">
         <div id="st-av" onclick="document.getElementById('stpi').click()" style="width:78px;height:78px;border-radius:50%;background:#E8F5EE;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;font-size:30px;cursor:pointer;overflow:hidden;color:#2D7A50">?</div>
-        <div class="pua" onclick="document.getElementById('stpi').click()" style="padding:10px">Add photo</div>
+        <div class="pua" onclick="document.getElementById('stpi').click()" style="padding:10px" id="lbl-st-add-p">Add photo</div>
         <input type="file" id="stpi" accept="image/*" style="display:none" onchange="hStPhoto(event)">
       </div>
-      <div class="fg"><label class="fl">Name</label><input class="fi" id="st-name" placeholder="Full name"></div>
+      <div class="fg"><label class="fl" id="lbl-st-name">Name</label><input class="fi" id="st-name" placeholder="Full name"></div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-        <div class="fg"><label class="fl">Date of Birth</label><input class="fi" id="st-dob" type="date"></div>
-        <div class="fg"><label class="fl">Grade Level</label><input class="fi" id="st-grade" placeholder="e.g. 3rd Grade"></div>
+        <div class="fg"><label class="fl" id="lbl-st-dob">Date of Birth</label><input class="fi" id="st-dob" type="date"></div>
+        <div class="fg"><label class="fl" id="lbl-st-grade">Grade Level</label><input class="fi" id="st-grade" placeholder="e.g. 3rd Grade"></div>
       </div>
-      <div class="fg"><label class="fl">Parent / Guardian</label><input class="fi" id="st-parent" placeholder="Parent or guardian name"></div>
-      <div class="fg"><label class="fl">Contact</label><input class="fi" id="st-contact" placeholder="Email or phone number"></div>
-      <div class="fg"><label class="fl">Interests</label><textarea class="fta" id="st-interests" placeholder="e.g. dinosaurs, Lego, drawing, football..." style="min-height:60px"></textarea></div>
+      <div class="fg"><label class="fl" id="lbl-st-parent">Parent / Guardian</label><input class="fi" id="st-parent" placeholder="Parent or guardian name"></div>
+      <div class="fg"><label class="fl" id="lbl-st-contact">Contact</label><input class="fi" id="st-contact" placeholder="Email or phone number"></div>
+      <div class="fg"><label class="fl" id="lbl-st-int">Interests</label><textarea class="fta" id="st-interests" placeholder="e.g. dinosaurs, Lego, drawing, football..." style="min-height:60px"></textarea></div>
     </div>
-    <div class="mfoot"><button class="btn-cancel" onclick="closeM('m-st')">Cancel</button><button class="btn-save" onclick="saveSt()">Save Student</button></div>
+    <div class="mfoot"><button class="btn-cancel" onclick="closeM('m-st')" id="btn-st-cnl">Cancel</button><button class="btn-save" onclick="saveSt()" id="btn-st-save">Save Student</button></div>
   </div>
 </div>
 
 <div class="moverlay" id="m-pin">
   <div class="msheet">
     <div class="mhandle"></div>
-    <div class="mhdr"><h2>Add Travel Pin</h2><button class="mcls" onclick="closeM('m-pin')">x</button></div>
+    <div class="mhdr"><h2 id="pin-modal-ttl">Add Travel Pin</h2><button class="mcls" onclick="closeM('m-pin')">x</button></div>
     <div class="mbody">
-      <div class="fg"><label class="fl">Student</label><select class="fsel2" id="pin-st"><option value="">Select student</option></select></div>
-      <div class="fg"><label class="fl">Place Name</label><input class="fi" id="pin-title" placeholder="e.g. Copenhagen Zoo"></div>
+      <div class="fg"><label class="fl" id="lbl-pin-st">Student</label><select class="fsel2" id="pin-st"><option value="" id="opt-pin-sel">Select student</option></select></div>
+      <div class="fg"><label class="fl" id="lbl-pin-title">Place Name</label><input class="fi" id="pin-title" placeholder="e.g. Copenhagen Zoo"></div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
         <div class="fg"><label class="fl">Latitude</label><input class="fi" id="pin-lat" type="number" step="any" placeholder="55.6761"></div>
         <div class="fg"><label class="fl">Longitude</label><input class="fi" id="pin-lng" type="number" step="any" placeholder="12.5683"></div>
       </div>
-      <div class="fg"><label class="fl">Date</label><input class="fi" id="pin-date" type="date"></div>
-      <div class="fg"><label class="fl">Notes</label><textarea class="fta" id="pin-desc" placeholder="What did you do here?"></textarea></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div class="fg"><label class="fl" id="lbl-pin-from">From Time</label><input class="fi" id="pin-from" type="time"></div>
+        <div class="fg"><label class="fl" id="lbl-pin-to">To Time</label><input class="fi" id="pin-to" type="time"></div>
+      </div>
+      <div class="fg"><label class="fl" id="lbl-pin-date">Date</label><input class="fi" id="pin-date" type="date"></div>
+      <div class="fg"><label class="fl" id="lbl-pin-notes">Notes</label><textarea class="fta" id="pin-desc" placeholder="What did you do here?"></textarea></div>
       <div class="fg">
-        <label class="fl">Photo</label>
-        <div class="pua" onclick="document.getElementById('pinpi').click()">Add photo</div>
+        <label class="fl" id="lbl-pin-photo">Photo</label>
+        <div class="pua" onclick="document.getElementById('pinpi').click()" id="lbl-pin-add-p">Add photo</div>
         <input type="file" id="pinpi" accept="image/*" style="display:none" onchange="hPinPhoto(event)">
         <div id="pin-pv" style="margin-top:8px"></div>
       </div>
     </div>
-    <div class="mfoot"><button class="btn-cancel" onclick="closeM('m-pin')">Cancel</button><button class="btn-save" onclick="savePin()">Save Pin</button></div>
+    <div class="mfoot"><button class="btn-cancel" onclick="closeM('m-pin')" id="btn-pin-cnl">Cancel</button><button class="btn-save" onclick="savePin()" id="btn-pin-save">Save Pin</button></div>
   </div>
 </div>
 
@@ -421,8 +425,14 @@ var ePhotos=[],eStPhoto=null,ePinPhoto=null,selSubs=[],customSubs=[];
 var mapObj=null,mapMarkers=[];
 
 var TX={
-  en:{dash:'Dashboard',dashSub:'Your homeschool overview',acts:'Activities',actsSub:'Document your learning journey',cal:'Calendar',map:'Travel Map',sts:'Students',stsSub:'Manage student profiles',exp:'Share & Export',expSub:'Export reports',newAct:'New Activity',addSt:'Add Student',addPin:'Add Pin',allYears:'All Years',allSts:'All Students',allStatus:'All Status',allSubs:'All Subjects',total:'Total Activities',comp:'Completed',inp:'In Progress',plan:'Planned',bySub:'Completed Lessons by Subject',search:'Search activities...',navDash:'Dashboard',navActs:'Activities',navCal:'Calendar',navMap:'Map',navSts:'Students',navExp:'Export',epdf:'Export PDF',bk:'Backup & Restore',bkd:'Download all your data, or restore from a previous backup.',dl:'Download Backup',rs:'Restore from Backup',edr:'Date Range',eopt:'Export Options',einc:'Include full descriptions',erep:'Export Report (PDF)',share:'Share Report as File',pins:'Pins',noActs:'No activities yet',noSts:'No students yet',noPins:'No pins yet',addFirst:'Add your first activity to get started.',createAct:'Create Activity',editAct:'Edit Activity',editSt:'Edit Student',noData:'No data',mos:['January','February','March','April','May','June','July','August','September','October','November','December'],wds:['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],r6:'Last 6 months',r3:'Last 3 months',r1:'Last month',r12:'Last 12 months',rAll:'All time',gbm:'Group by month',gbs:'Group by subject'},
-  da:{dash:'Oversigt',dashSub:'Din hjemmeskole-oversigt',acts:'Aktiviteter',actsSub:'Dokumenter din læringsrejse',cal:'Kalender',map:'Rejsekort',sts:'Elever',stsSub:'Administrer elevprofiler',exp:'Del & Eksporter',expSub:'Eksporter rapporter',newAct:'Ny aktivitet',addSt:'Tilføj elev',addPin:'Tilføj pin',allYears:'Alle år',allSts:'Alle elever',allStatus:'Alle statusser',allSubs:'Alle fag',total:'Aktiviteter i alt',comp:'Afsluttet',inp:'I gang',plan:'Planlagt',bySub:'Afsluttede lektioner pr. fag',search:'Søg aktiviteter...',navDash:'Oversigt',navActs:'Aktiviteter',navCal:'Kalender',navMap:'Kort',navSts:'Elever',navExp:'Eksport',epdf:'Eksporter PDF',bk:'Sikkerhedskopi',bkd:'Download alle dine data, eller gendan fra en sikkerhedskopi.',dl:'Download sikkerhedskopi',rs:'Gendan fra sikkerhedskopi',edr:'Datointerval',eopt:'Eksportmuligheder',einc:'Inkluder fulde beskrivelser',erep:'Eksporter rapport (PDF)',share:'Del rapport som fil',pins:'Pins',noActs:'Ingen aktiviteter endnu',noSts:'Ingen elever endnu',noPins:'Ingen pins endnu',addFirst:'Tilføj din første aktivitet for at komme i gang.',createAct:'Opret aktivitet',editAct:'Rediger aktivitet',editSt:'Rediger elev',noData:'Ingen data',mos:['Januar','Februar','Marts','April','Maj','Juni','Juli','August','September','Oktober','November','December'],wds:['Søn','Man','Tir','Ons','Tor','Fre','Lør'],r6:'Sidste 6 måneder',r3:'Sidste 3 måneder',r1:'Sidste måned',r12:'Sidste 12 måneder',rAll:'Alle tider',gbm:'Gruppér pr. måned',gbs:'Gruppér pr. fag'}
+  en:{
+    dash:'Dashboard',dashSub:'Your homeschool overview',acts:'Activities',actsSub:'Document your learning journey',cal:'Calendar',map:'Travel Map',sts:'Students',stsSub:'Manage student profiles',exp:'Share & Export',expSub:'Export reports',newAct:'New Activity',addSt:'Add Student',addPin:'Add Pin',allYears:'All Years',allSts:'All Students',allStatus:'All Status',allSubs:'All Subjects',total:'Total Activities',comp:'Completed',inp:'In Progress',plan:'Planned',bySub:'Completed Lessons by Subject',search:'Search activities...',navDash:'Dashboard',navActs:'Activities',navCal:'Calendar',navMap:'Map',navSts:'Students',navExp:'Export',epdf:'Export PDF',bk:'Backup & Restore',bkd:'Download all your data, or restore from a previous backup.',dl:'Download Backup',rs:'Restore from Backup',edr:'Date Range',eopt:'Export Options',einc:'Include full descriptions',erep:'Export Report (PDF)',share:'Share Report as File',pins:'Pins',noActs:'No activities yet',noSts:'No students yet',noPins:'No pins yet',addFirst:'Add your first activity to get started.',createAct:'Create Activity',editAct:'Edit Activity',editSt:'Edit Student',noData:'No data',mos:['January','February','March','April','May','June','July','August','September','October','November','December'],wds:['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],r6:'Last 6 months',r3:'Last 3 months',r1:'Last month',r12:'Last 12 months',rAll:'All time',gbm:'Group by month',gbs:'Group by subject',
+    lblSt:'Student',lblTitle:'Title',lblSubs:'Subjects',lblStatus:'Status',lblDur:'Duration (hours)',lblDate:'Date',lblDesc:'Description',lblPhotos:'Photos',lblAddPhotos:'Add photos',lblCnl:'Cancel',lblSaveAct:'Save Activity',lblAddPhoto:'Add photo',lblStName:'Name',lblStDob:'Date of Birth',lblStGrade:'Grade Level',lblStParent:'Parent / Guardian',lblStContact:'Contact',lblStInt:'Interests',lblSaveSt:'Save Student',lblPinTtl:'Place Name',lblPinFrom:'From Time',lblPinTo:'To Time',lblPinNotes:'Notes',lblSavePin:'Save Pin',lblSelSt:'Select student',lblCustSub:'Custom subject...',lblAdd:'Add',lblStFull:'Full name',lblStPlGrade:'e.g. 3rd Grade',lblStPlParent:'Parent or guardian name',lblStPlContact:'Email or phone number',lblStPlInt:'e.g. dinosaurs, Lego...',lblPinPlName:'e.g. Copenhagen Zoo',lblPinPlNotes:'What did you do here?',lblCreatePin:'Add Travel Pin',lblStay:'Ophold',lblTimeFrom:'From',lblTimeTo:'To'
+  },
+  da:{
+    dash:'Oversigt',dashSub:'Din hjemmeskole-oversigt',acts:'Aktiviteter',actsSub:'Dokumenter din læringsrejse',cal:'Kalender',map:'Rejsekort',sts:'Elever',stsSub:'Administrer elevprofiler',exp:'Del & Eksporter',expSub:'Eksporter rapporter',newAct:'Ny aktivitet',addSt:'Tilføj elev',addPin:'Tilføj pin',allYears:'Alle år',allSts:'Alle elever',allStatus:'Alle statusser',allSubs:'Alle fag',total:'Aktiviteter i alt',comp:'Afsluttet',inp:'I gang',plan:'Planlagt',bySub:'Afsluttede lektioner pr. fag',search:'Søg aktiviteter...',navDash:'Oversigt',navActs:'Aktiviteter',navCal:'Kalender',navMap:'Kort',navSts:'Elever',navExp:'Eksport',epdf:'Eksporter PDF',bk:'Sikkerhedskopi',bkd:'Download alle dine data, eller gendan fra en sikkerhedskopi.',dl:'Download sikkerhedskopi',rs:'Gendan fra sikkerhedskopi',edr:'Datointerval',eopt:'Eksportmuligheder',einc:'Inkluder fulde beskrivelser',erep:'Eksporter rapport (PDF)',share:'Del rapport som fil',pins:'Pins',noActs:'Ingen aktiviteter endnu',noSts:'Ingen elever endnu',noPins:'Ingen pins endnu',addFirst:'Tilføj din første aktivitet for at komme i gang.',createAct:'Opret aktivitet',editAct:'Rediger aktivitet',editSt:'Rediger elev',noData:'Ingen data',mos:['Januar','Februar','Marts','April','Maj','Juni','Juli','August','September','Oktober','November','December'],wds:['Søn','Man','Tir','Ons','Tor','Fre','Lør'],r6:'Sidste 6 måneder',r3:'Sidste 3 måneder',r1:'Sidste måned',r12:'Sidste 12 måneder',rAll:'Alle tider',gbm:'Gruppér pr. måned',gbs:'Gruppér pr. fag',
+    lblSt:'Elev',lblTitle:'Titel',lblSubs:'Fag',lblStatus:'Status',lblDur:'Varighed (timer)',lblDate:'Dato',lblDesc:'Beskrivelse',lblPhotos:'Billeder',lblAddPhotos:'Tilføj billeder',lblCnl:'Annuller',lblSaveAct:'Gem aktivitet',lblAddPhoto:'Tilføj billede',lblStName:'Navn',lblStDob:'Fødselsdato',lblStGrade:'Klassetrin',lblStParent:'Forælder / Værge',lblStContact:'Kontakt',lblStInt:'Interesser',lblSaveSt:'Gem elev',lblPinTtl:'Stednavn',lblPinFrom:'Fra kl.',lblPinTo:'Til kl.',lblPinNotes:'Noter',lblSavePin:'Gem pin',lblSelSt:'Vælg elev',lblCustSub:'Valgfrit fag...',lblAdd:'Tilføj',lblStFull:'Fulde navn',lblStPlGrade:'f.eks. 3. klasse',lblStPlParent:'Forælder eller værges navn',lblStPlContact:'E-mail eller telefonnummer',lblStPlInt:'f.eks. dinosaurer, Lego...',lblPinPlName:'f.eks. København Zoo',lblPinPlNotes:'Hvad lavede I her?',lblCreatePin:'Tilføj rejse-pin',lblStay:'Ophold',lblTimeFrom:'Fra',lblTimeTo:'Til'
+  }
 };
 function t(k){return (TX[lang]||TX.en)[k]||(TX.en[k]||k);}
 
@@ -469,436 +479,603 @@ function go(p){
 
 function setL(l){
   lang=l;
-  document.querySelectorAll('[id^="en"]').forEach(function(b){b.classList.toggle('active',l==='en');});
-  document.querySelectorAll('[id^="da"]').forEach(function(b){b.classList.toggle('active',l==='da');});
-  var si=document.getElementById('search');if(si)si.placeholder=t('search');
-  var er=document.getElementById('exp-range');
-  if(er&&er.options.length>=5){er.options[0].text=t('r6');er.options[1].text=t('r3');er.options[2].text=t('r1');er.options[3].text=t('r12');er.options[4].text=t('rAll');}
-  var tm=document.getElementById('tog-mo');var ts=document.getElementById('tog-su');
-  if(tm)tm.textContent=t('gbm');if(ts)ts.textContent=t('gbs');
-  rCurr();
-}
-function rCurr(){
+  document.querySelectorAll('[id^="en"]').forEach(function(b){b.classList.toggle('active',b.id==='en'+b.id.slice(2));});
+  document.querySelectorAll('[id^="da"]').forEach(function(b){b.classList.toggle('active',b.id==='da'+b.id.slice(2));});
+  
+  // UI Translations
+  document.getElementById('t-dash').innerText=t('dash');
+  document.getElementById('t-dash-sub').innerText=t('dashSub');
+  document.getElementById('t-acts').innerText=t('acts');
+  document.getElementById('t-acts-sub').innerText=t('actsSub');
+  document.getElementById('t-new-act').innerText=t('newAct');
+  document.getElementById('t-cal').innerText=t('cal');
+  document.getElementById('t-map').innerText=t('map');
+  document.getElementById('t-pins').innerText=t('pins');
+  document.getElementById('t-add-pin').innerText=t('addPin');
+  document.getElementById('t-sts').innerText=t('sts');
+  document.getElementById('t-sts-sub').innerText=t('stsSub');
+  document.getElementById('t-add-st').innerText=t('addSt');
+  document.getElementById('t-exp').innerText=t('exp');
+  document.getElementById('t-exp-sub').innerText=t('expSub');
+  document.getElementById('t-epdf').innerText=t('epdf');
+  document.getElementById('t-edr').innerText=t('edr');
+  document.getElementById('t-eopt').innerText=t('eopt');
+  document.getElementById('t-einc').innerText=t('einc');
+  document.getElementById('t-erep').innerText=t('erep');
+  document.getElementById('t-share').innerText=t('share');
+  document.getElementById('t-bk').innerText=t('bk');
+  document.getElementById('t-bkd').innerText=t('bkd');
+  document.getElementById('t-dl').innerText=t('dl');
+  document.getElementById('t-rs').innerText=t('rs');
+  document.getElementById('t-by-sub').innerText=t('bySub');
+  
+  // Bottom Nav
+  document.getElementById('nt-dash').innerText=t('navDash');
+  document.getElementById('nt-acts').innerText=t('navActs');
+  document.getElementById('nt-cal').innerText=t('navCal');
+  document.getElementById('nt-map').innerText=t('navMap');
+  document.getElementById('nt-sts').innerText=t('navSts');
+  document.getElementById('nt-export').innerText=t('navExp');
+  
+  // Select options
+  document.getElementById('opt-all-years').innerText=t('allYears');
+  document.getElementById('opt-all-students-d').innerText=t('allSts');
+  document.getElementById('opt-all-students-a').innerText=t('allSts');
+  document.getElementById('opt-all-students-e').innerText=t('allSts');
+  document.getElementById('opt-all-status').innerText=t('allStatus');
+  document.getElementById('opt-all-subjects').innerText=t('allSubs');
+  document.getElementById('opt-comp').innerText=t('comp');
+  document.getElementById('opt-inp').innerText=t('inp');
+  document.getElementById('opt-plan').innerText=t('plan');
+  document.getElementById('opt-r6').innerText=t('r6');
+  document.getElementById('opt-r3').innerText=t('r3');
+  document.getElementById('opt-r1').innerText=t('r1');
+  document.getElementById('opt-r12').innerText=t('r12');
+  document.getElementById('opt-rAll').innerText=t('rAll');
+  document.getElementById('tog-mo').innerText=t('gbm');
+  document.getElementById('tog-su').innerText=t('gbs');
+  
+  // Labels and Placeholders
+  document.getElementById('search').placeholder=t('search');
+  document.getElementById('lbl-exp-st').innerText=t('lblSt');
+  document.getElementById('lbl-act-st').innerText=t('lblSt');
+  document.getElementById('lbl-act-title').innerText=t('lblTitle');
+  document.getElementById('lbl-act-subs').innerText=t('lblSubs');
+  document.getElementById('lbl-act-status').innerText=t('lblStatus');
+  document.getElementById('lbl-act-dur').innerText=t('lblDur');
+  document.getElementById('lbl-act-date').innerText=t('lblDate');
+  document.getElementById('lbl-act-desc').innerText=t('lblDesc');
+  document.getElementById('lbl-act-photos').innerText=t('lblPhotos');
+  document.getElementById('lbl-act-add-p').innerText=t('lblAddPhotos');
+  document.getElementById('btn-act-cnl').innerText=t('lblCnl');
+  document.getElementById('btn-act-save').innerText=t('lblSaveAct');
+  document.getElementById('opt-sel-st').innerText=t('lblSelSt');
+  document.getElementById('btn-act-add-sub').innerText=t('lblAdd');
+  document.getElementById('csi').placeholder=t('lblCustSub');
+  document.getElementById('act-title').placeholder=t('lblTitle');
+  document.getElementById('act-desc').placeholder=t('lblPinPlNotes');
+  document.getElementById('opt-act-p').innerText=t('plan');
+  document.getElementById('opt-act-i').innerText=t('inp');
+  document.getElementById('opt-act-c').innerText=t('comp');
+  
+  document.getElementById('lbl-st-add-p').innerText=t('lblAddPhoto');
+  document.getElementById('lbl-st-name').innerText=t('lblStName');
+  document.getElementById('lbl-st-dob').innerText=t('lblDate');
+  document.getElementById('lbl-st-grade').innerText=t('lblStGrade');
+  document.getElementById('lbl-st-parent').innerText=t('lblStParent');
+  document.getElementById('lbl-st-contact').innerText=t('lblStContact');
+  document.getElementById('lbl-st-int').innerText=t('lblStInt');
+  document.getElementById('btn-st-cnl').innerText=t('lblCnl');
+  document.getElementById('btn-st-save').innerText=t('lblSaveSt');
+  document.getElementById('st-name').placeholder=t('lblStFull');
+  document.getElementById('st-grade').placeholder=t('lblStPlGrade');
+  document.getElementById('st-parent').placeholder=t('lblStPlParent');
+  document.getElementById('st-contact').placeholder=t('lblStPlContact');
+  document.getElementById('st-interests').placeholder=t('lblStPlInt');
+  
+  document.getElementById('lbl-pin-st').innerText=t('lblSt');
+  document.getElementById('lbl-pin-title').innerText=t('lblPinTtl');
+  document.getElementById('lbl-pin-from').innerText=t('lblPinFrom');
+  document.getElementById('lbl-pin-to').innerText=t('lblPinTo');
+  document.getElementById('lbl-pin-date').innerText=t('lblDate');
+  document.getElementById('lbl-pin-notes').innerText=t('lblPinNotes');
+  document.getElementById('lbl-pin-photo').innerText=t('lblAddPhoto');
+  document.getElementById('lbl-pin-add-p').innerText=t('lblAddPhoto');
+  document.getElementById('btn-pin-cnl').innerText=t('lblCnl');
+  document.getElementById('btn-pin-save').innerText=t('lblSavePin');
+  document.getElementById('opt-pin-sel').innerText=t('lblSelSt');
+  document.getElementById('pin-title').placeholder=t('lblPinPlName');
+  document.getElementById('pin-desc').placeholder=t('lblPinPlNotes');
+  
   if(page==='dashboard')rDash();
   else if(page==='activities')rActs();
   else if(page==='calendar')rCal();
+  else if(page==='map')rMap();
   else if(page==='students')rSts();
-  else if(page==='export')rExp();
 }
 
-function popSts(){
-  ['act-st','f-student','pin-st','exp-st','df-student'].forEach(function(id){
-    var sel=document.getElementById(id);if(!sel)return;
-    var cur=sel.value;
-    var def=(id==='act-st'||id==='pin-st')?'Select student':t('allSts');
-    sel.innerHTML='<option value="">'+def+'</option>'+D.students.map(function(s){return'<option value="'+s.id+'"'+(cur===s.id?' selected':'')+'>'+esc(s.name)+'</option>';}).join('');
+function openM(id){document.getElementById(id).classList.add('open');}
+function closeM(id){document.getElementById(id).classList.remove('open');}
+
+function toast(m){
+  var x=document.createElement('div');x.className='toast';x.innerText=m;
+  document.body.appendChild(x);setTimeout(function(){x.remove();},2000);
+}
+
+function updateStudentDropdowns(){
+  var html='<option value="">'+t('allSts')+'</option>';
+  var html2='<option value="">'+t('lblSelSt')+'</option>';
+  D.students.forEach(function(s){
+    html+=`<option value="${s.id}">${s.name}</option>`;
+    html2+=`<option value="${s.id}">${s.name}</option>`;
   });
+  document.getElementById('df-student').innerHTML=html;
+  document.getElementById('f-student').innerHTML=html;
+  document.getElementById('exp-st').innerHTML=html;
+  document.getElementById('act-st').innerHTML=html2;
+  document.getElementById('pin-st').innerHTML=html2;
+}
+
+function updateYearDropdown(){
+  var yrs=[];
+  D.activities.forEach(function(a){if(a.date){var y=a.date.split('-')[0];if(!yrs.includes(y))yrs.push(y);}});
+  yrs.sort();
+  var html='<option value="">'+t('allYears')+'</option>';
+  yrs.forEach(function(y){html+=`<option value="${y}">${y}</option>`;});
+  document.getElementById('df-year').innerHTML=html;
+}
+
+function updateSubjectDropdown(){
+  var html='<option value="">'+t('allSubs')+'</option>';
+  SUBS.concat(customSubs).forEach(function(s){html+=`<option value="${s}">${s}</option>`;});
+  document.getElementById('f-subject').innerHTML=html;
 }
 
 function rDash(){
-  popSts();
-  var years=[].concat([].filter.call(D.activities,function(a){return a.date&&a.date.slice(0,4);})).map(function(a){return a.date.slice(0,4);}).filter(function(v,i,a){return a.indexOf(v)===i;}).sort().reverse();
-  var ys=document.getElementById('df-year');
-  if(ys){var cv=ys.value;ys.innerHTML='<option value="">'+t('allYears')+'</option>'+years.map(function(y){return'<option value="'+y+'"'+(cv===y?' selected':'')+'>'+y+'</option>';}).join('');}
-  var yf=document.getElementById('df-year')?document.getElementById('df-year').value:'';
-  var sf=document.getElementById('df-student')?document.getElementById('df-student').value:'';
-  var acts=D.activities.filter(function(a){return(!yf||a.date&&a.date.indexOf(yf)===0)&&(!sf||a.studentId===sf);});
-  var tot=acts.length;
-  var comp=acts.filter(function(a){return a.status==='Completed';}).length;
-  var inp=acts.filter(function(a){return a.status==='In Progress';}).length;
-  var plan=acts.filter(function(a){return a.status==='Planned';}).length;
-  var ds=document.getElementById('dash-stats');
-  if(ds){
-    ds.innerHTML='<div class="stat"><div class="sico g">&#128218;</div><div><div class="snum">'+tot+'</div><div class="slbl">'+t('total')+'</div></div></div>'+
-      '<div class="stat"><div class="sico g">&#10003;</div><div><div class="snum">'+comp+'</div><div class="slbl">'+t('comp')+'</div></div></div>'+
-      '<div class="stat"><div class="sico o">&#9201;</div><div><div class="snum">'+inp+'</div><div class="slbl">'+t('inp')+'</div></div></div>'+
-      '<div class="stat"><div class="sico b">&#128197;</div><div><div class="snum">'+plan+'</div><div class="slbl">'+t('plan')+'</div></div></div>';
-  }
-  var bySub=document.getElementById('t-by-sub');if(bySub)bySub.textContent=t('bySub');
-  var ca=acts.filter(function(a){return a.status==='Completed';});
-  var sc2={};
-  ca.forEach(function(a){(a.subjects||[]).forEach(function(s){sc2[s]=(sc2[s]||0)+1;});});
-  var cd=Object.keys(sc2).map(function(n){return{n:n,c:sc2[n],col:sc(n)};});
-  var ct=cd.reduce(function(x,d){return x+d.c;},0);
-  var dc=document.getElementById('dash-chart');
-  if(dc){
-    if(ct===0){dc.innerHTML='<div style="text-align:center;color:#9A9A9A;padding:24px;font-size:13px">'+t('noData')+'</div>';}
-    else{dc.innerHTML='<div class="chart-wrap">'+donut(cd,ct)+'<div class="chart-legend">'+cd.map(function(d){return'<div class="li"><div class="ld" style="background:'+d.col+'"></div><span>'+esc(d.n)+'</span></div>';}).join('')+'</div></div>';}
-  }
-  var statuses=['Completed','In Progress','Planned'];
-  var scols={Completed:'#2D7A50','In Progress':'#D97706',Planned:'#3B82F6'};
-  var slbls={Completed:t('comp'),'In Progress':t('inp'),Planned:t('plan')};
-  var secs='';
-  statuses.forEach(function(st){
-    var items=acts.filter(function(a){return a.status===st;}).sort(function(a,b){return(b.date||'').localeCompare(a.date||'');});
-    if(!items.length)return;
-    secs+='<div class="sh2"><div class="sd" style="background:'+scols[st]+'"></div><h3>'+slbls[st]+'</h3><span>'+items.length+'</span></div><div class="sec-acts">'+items.map(function(a){return acHtml(a,false);}).join('')+'</div><div style="height:4px"></div>';
+  var fy=document.getElementById('df-year').value;
+  var fs=document.getElementById('df-student').value;
+  var filtered=D.activities.filter(function(a){
+    if(fy && (!a.date || !a.date.startsWith(fy)))return false;
+    if(fs && a.studentId!==fs)return false;
+    return true;
   });
-  var ds2=document.getElementById('dash-secs');if(ds2)ds2.innerHTML=secs;
-}
-
-function donut(data,total){
-  var cx=75,cy=75,r=60,ir=38;var angle=-90;var paths='';
-  data.forEach(function(d){
-    var sw=(d.c/total)*360;var ea=angle+sw;
-    if(sw>=359.99){paths+='<circle cx="'+cx+'" cy="'+cy+'" r="'+(r+ir)/2+'" fill="none" stroke="'+d.col+'" stroke-width="'+(r-ir)+'"/>';angle+=sw;return;}
-    var to=function(a){return a*Math.PI/180;};
-    var x1=cx+r*Math.cos(to(angle)),y1=cy+r*Math.sin(to(angle));
-    var x2=cx+r*Math.cos(to(ea)),y2=cy+r*Math.sin(to(ea));
-    var ix1=cx+ir*Math.cos(to(angle)),iy1=cy+ir*Math.sin(to(angle));
-    var ix2=cx+ir*Math.cos(to(ea)),iy2=cy+ir*Math.sin(to(ea));
-    var lg=sw>180?1:0;
-    paths+='<path d="M'+x1+','+y1+'A'+r+','+r+' 0 '+lg+',1 '+x2+','+y2+'L'+ix2+','+iy2+'A'+ir+','+ir+' 0 '+lg+',0 '+ix1+','+iy1+'Z" fill="'+d.col+'"/>';
-    angle+=sw;
+  
+  var cComp=0,cInp=0,cPlan=0;
+  var subMap={};
+  filtered.forEach(function(a){
+    if(a.status==='Completed')cComp++;
+    else if(a.status==='In Progress')cInp++;
+    else cPlan++;
+    
+    if(a.status==='Completed' && a.subjects){
+      a.subjects.forEach(function(s){subMap[s]=(subMap[s]||0)+1;});
+    }
   });
-  return '<svg width="150" height="150" viewBox="0 0 150 150">'+paths+'<text x="75" y="79" text-anchor="middle" font-size="20" font-weight="700" font-family="Lora,serif" fill="#1A1A1A">'+total+'</text></svg>';
+  
+  document.getElementById('dash-stats').innerHTML=`
+    <div class="stat"><div class="sico g">&#128216;</div><div><div class="snum">${filtered.length}</div><div class="slbl">${t('total')}</div></div></div>
+    <div class="stat"><div class="sico b">&#9989;</div><div><div class="snum">${cComp}</div><div class="slbl">${t('comp')}</div></div></div>
+    <div class="stat"><div class="sico o">&#9203;</div><div><div class="snum">${cInp}</div><div class="slbl">${t('inp')}</div></div></div>
+    <div class="stat"><div class="sico">&#128197;</div><div><div class="snum">${cPlan}</div><div class="slbl">${t('plan')}</div></div></div>
+  `;
+  
+  var ch=document.getElementById('dash-chart');
+  if(Object.keys(subMap).length===0){
+    ch.innerHTML=`<div style="font-size:12px;color:#9A9A9A;text-align:center;padding:20px">${t('noData')}</div>`;
+  }else{
+    var html='<div class="chart-wrap"><div class="chart-legend">';
+    Object.keys(subMap).forEach(function(s){
+      html+=`<div class="li"><div class="ld" style="background:${sc(s)}"></div><span style="flex:1">${s}</span><strong>${subMap[s]}</strong></div>`;
+    });
+    html+='</div></div>';
+    ch.innerHTML=html;
+  }
 }
 
-function acHtml(act,edit){
-  var st=D.students.filter(function(s){return s.id===act.studentId;})[0];
-  var photo=act.photos&&act.photos[0];
-  var sCls=act.status==='Completed'?'tc':act.status==='In Progress'?'ti':'tp';
-  var sLbl=act.status==='Completed'?t('comp'):act.status==='In Progress'?t('inp'):t('plan');
-  var tags=(act.subjects||[]).map(function(s){return'<span class="tag" style="background:'+sc(s)+'22;color:'+sc(s)+'">'+esc(s)+'</span>';}).join('');
-  var acts=edit?'<div class="card-acts"><button class="bico edit" onclick="openActModal(\''+act.id+'\')">&#9998;</button><button class="bico del" onclick="delAct(\''+act.id+'\')">&#128465;</button></div>':'';
-  var dt=act.date?fmtDate(act.date):'';
-  return '<div class="ac">'+(photo?'<img class="ac-photo" src="'+photo+'" loading="lazy">':'')+
-    '<div class="ac-body"><div class="ac-title">'+esc(act.title||'')+'</div>'+
-    (st?'<div class="ac-student">'+esc(st.name)+'</div>':'')+
-    (act.description?'<div class="ac-desc">'+esc(act.description)+'</div>':'')+
-    '<div class="ac-meta"><div class="tags">'+tags+'<span class="tag '+sCls+'">'+sLbl+'</span></div>'+
-    '<div style="display:flex;align-items:center;gap:6px">'+(dt?'<span class="adate">'+dt+'</span>':'')+acts+'</div></div></div></div>';
+function jumpToActivity(activityId) {
+  go('activities');
+  setTimeout(function() {
+    var el = document.getElementById('act-' + activityId);
+    if(el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      el.style.backgroundColor = '#fff9c4';
+      setTimeout(function() { el.style.backgroundColor = ''; }, 1500);
+    }
+  }, 300);
 }
-
-function fmtDate(d){if(!d)return'';var dt=new Date(d+'T12:00:00');return(TX[lang]||TX.en).mos[dt.getMonth()].slice(0,3)+' '+dt.getDate();}
-function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
 function rActs(){
-  popSts();
-  var allSubs=[].concat.apply([],D.activities.map(function(a){return a.subjects||[];})).filter(function(v,i,a){return a.indexOf(v)===i;}).sort();
-  var fsubSel=document.getElementById('f-subject');
-  if(fsubSel){var cv=fsubSel.value;fsubSel.innerHTML='<option value="">'+t('allSubs')+'</option>'+allSubs.map(function(s){return'<option value="'+esc(s)+'"'+(cv===s?' selected':'')+'>'+esc(s)+'</option>';}).join('');}
-  var q=(document.getElementById('search')?document.getElementById('search').value:'').toLowerCase();
-  var sf=document.getElementById('f-student')?document.getElementById('f-student').value:'';
-  var stf=document.getElementById('f-status')?document.getElementById('f-status').value:'';
-  var subf=document.getElementById('f-subject')?document.getElementById('f-subject').value:'';
-  var acts=D.activities.filter(function(a){
-    return(!q||(a.title||'').toLowerCase().indexOf(q)>=0||(a.description||'').toLowerCase().indexOf(q)>=0)&&
-      (!sf||a.studentId===sf)&&(!stf||a.status===stf)&&(!subf||(a.subjects||[]).indexOf(subf)>=0);
-  }).sort(function(a,b){return(b.date||'').localeCompare(a.date||'');});
-  var c=document.getElementById('act-list');
-  if(!c)return;
-  if(!acts.length){c.innerHTML='<div class="empty"><div class="empty-ico">&#128218;</div><h3>'+t('noActs')+'</h3><p>'+t('addFirst')+'</p></div>';}
-  else{c.innerHTML=acts.map(function(a){return acHtml(a,true);}).join('');}
-}
-
-function chMo(d){cal.m+=d;if(cal.m>11){cal.m=0;cal.y++;}if(cal.m<0){cal.m=11;cal.y--;}rCal();}
-function rCal(){
-  var y=cal.y,m=cal.m;
-  var mos=(TX[lang]||TX.en).mos;var wds=(TX[lang]||TX.en).wds;
-  var cl=document.getElementById('cal-lbl');if(cl)cl.textContent=mos[m]+' '+y;
-  var cw=document.getElementById('cwds');if(cw)cw.innerHTML=wds.map(function(d){return'<div class="cwd">'+d+'</div>';}).join('');
-  var fd=new Date(y,m,1).getDay(),dim=new Date(y,m+1,0).getDate();
-  var today=new Date();var html='';
-  for(var i=0;i<fd;i++)html+='<div class="cday om"></div>';
-  for(var dd=1;dd<=dim;dd++){
-    var ds=y+'-'+(m+1<10?'0':'')+(m+1)+'-'+(dd<10?'0':'')+dd;
-    var isT=today.getFullYear()===y&&today.getMonth()===m&&today.getDate()===dd;
-    var da=D.activities.filter(function(a){return a.date===ds;});
-    var pills=da.slice(0,3).map(function(a){var col=a.subjects&&a.subjects[0]?sc(a.subjects[0]):'#9CA3AF';var lbl=a.subjects&&a.subjects[0]?a.subjects[0].slice(0,4):'...';return'<div class="cpill" style="background:'+col+'">'+esc(lbl)+'</div>';}).join('');
-    html+='<div class="cday'+(isT?' today':'')+'"><div class="cdate">'+dd+'</div><div class="cpills">'+pills+'</div></div>';
+  var q=document.getElementById('search').value.toLowerCase();
+  var fs=document.getElementById('f-student').value;
+  var fst=document.getElementById('f-status').value;
+  var fsub=document.getElementById('f-subject').value;
+  
+  var fil=D.activities.filter(function(a){
+    if(fs && a.studentId!==fs)return false;
+    if(fst && a.status!==fst)return false;
+    if(fsub && (!a.subjects || !a.subjects.includes(fsub)))return false;
+    if(q && (!a.title.toLowerCase().includes(q) && !a.description.toLowerCase().includes(q)))return false;
+    return true;
+  });
+  
+  var list=document.getElementById('act-list');
+  if(fil.length===0){
+    list.innerHTML=`<div class="empty"><div class="empty-ico">&#128214;</div><h3>${t('noActs')}</h3><p>${t('addFirst')}</p></div>`;
+    return;
   }
-  var cd=document.getElementById('cdays');if(cd)cd.innerHTML=html;
+  
+  fil.sort(function(a,b){return new Date(b.date||0)-new Date(a.date||0);});
+  
+  var html='';
+  fil.forEach(function(a){
+    var sName=D.students.find(function(x){return x.id===a.studentId;});
+    sName = sName ? sName.name : '';
+    var imgHtml=a.photos && a.photos.length > 0 ? `<img class="ac-photo" src="${a.photos[0]}">` : '';
+    var cls=a.status==='Completed'?'tc':(a.status==='In Progress'?'ti':'tp');
+    var tagsHtml=a.subjects?a.subjects.map(function(s){return `<div class="tag" style="background:${sc(s)}20;color:${sc(s)}">${s}</div>`;}).join(''):'';
+    
+    html+=`
+      <div class="ac" id="act-${a.id}">
+        ${imgHtml}
+        <div class="ac-body">
+          <div style="display:flex;justify-content:between;align-items:flex-start;gap:10px">
+            <div style="flex:1">
+              <div class="ac-title">${a.title}</div>
+              <div class="ac-student">${sName} &bull; ${a.duration||1}h</div>
+            </div>
+            <div class="card-acts">
+              <button class="bico edit" onclick="editAct('${a.id}')">&#9998;</button>
+              <button class="bico del" onclick="delAct('${a.id}')">&#128465;</button>
+            </div>
+          </div>
+          <div class="ac-desc">${a.description||''}</div>
+          <div class="ac-meta">
+            <div class="tags">${tagsHtml}<div class="tag ${cls}">${t(a.status==='Completed'?'comp':(a.status==='In Progress'?'inp':'plan'))}</div></div>
+            <div class="adate">${a.date||''}</div>
+          </div>
+        </div>
+      </div>
+    `;
+  });
+  list.innerHTML=html;
 }
 
-function rMap(){
-  try{
-    if(typeof L==='undefined'){
-      document.getElementById('leaflet-map').innerHTML='<div class="map-placeholder"><h3>Map unavailable</h3><p>Requires internet connection</p></div>';
-      rPinsList();return;
-    }
-    if(!mapObj){
-      mapObj=L.map('leaflet-map').setView([20,10],2);
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap contributors'}).addTo(mapObj);
-      mapObj.on('click',function(e){
-        document.getElementById('pin-lat').value=e.latlng.lat.toFixed(6);
-        document.getElementById('pin-lng').value=e.latlng.lng.toFixed(6);
-        openPinModal();
-      });
-    }
-    setTimeout(function(){if(mapObj)mapObj.invalidateSize();},200);
-    mapMarkers.forEach(function(mk){mk.remove();});mapMarkers=[];
-    D.pins.forEach(function(p){
-      if(!p.lat||!p.lng)return;
-      var mk=L.marker([p.lat,p.lng]).addTo(mapObj).bindPopup('<b>'+esc(p.title)+'</b>'+(p.date?'<br>'+fmtDate(p.date):''));
-      mapMarkers.push(mk);
-    });
-    var valid=D.pins.filter(function(p){return p.lat&&p.lng;});
-    if(valid.length>0){
-      var lls=valid.map(function(p){return L.latLng(p.lat,p.lng);});
-      setTimeout(function(){if(mapObj){mapObj.fitBounds(L.latLngBounds(lls),{padding:[40,40]});mapObj.invalidateSize();}},300);
-    }
-  }catch(e){console.log('Map error:',e);}
-  rPinsList();
-}
-
-function rPinsList(){
-  var c=document.getElementById('pins-list');if(!c)return;
-  if(!D.pins.length){c.innerHTML='<div class="empty"><div class="empty-ico">&#128205;</div><h3>'+t('noPins')+'</h3><p>Tap the map to add a pin</p></div>';return;}
-  var sorted=D.pins.slice().sort(function(a,b){return(b.date||'').localeCompare(a.date||'');});
-  c.innerHTML=sorted.map(function(p){
-    var st=D.students.filter(function(s){return s.id===p.studentId;})[0];
-    return'<div class="pincard">'+(p.photo?'<img class="pincard-photo" src="'+p.photo+'" loading="lazy">':'')+
-      '<div class="pincard-body"><div style="display:flex;justify-content:space-between;align-items:flex-start">'+
-      '<div><div class="pincard-title">'+esc(p.title||'')+'</div>'+(st?'<div class="pincard-meta">'+esc(st.name)+'</div>':'')+
-      '<div class="pincard-meta">'+( p.date?fmtDate(p.date):'' )+(p.description?' - '+esc(p.description):'')+'</div></div>'+
-      '<button class="bico del" onclick="delPin(\''+p.id+'\')">&#128465;</button></div></div></div>';
-  }).join('');
-}
-
-function rSts(){
-  var c=document.getElementById('st-list');if(!c)return;
-  if(!D.students.length){c.innerHTML='<div class="empty"><div class="empty-ico">&#128100;</div><h3>'+t('noSts')+'</h3><p>Add your first student to get started.</p></div>';return;}
-  c.innerHTML=D.students.map(function(s){
-    var age=s.dob?Math.floor((Date.now()-new Date(s.dob).getTime())/(365.25*24*3600*1000)):null;
-    var ac=D.activities.filter(function(a){return a.studentId===s.id;}).length;
-    var av=s.photo?'<img src="'+s.photo+'" style="width:54px;height:54px;border-radius:50%;object-fit:cover">':'<div class="stavatar">&#128100;</div>';
-    return'<div class="stcard">'+av+'<div class="stinfo"><div class="stname">'+esc(s.name)+'</div>'+
-      '<div class="stmeta">'+(age!==null?'Age: '+age+' years':''+(s.grade?' - Grade: '+esc(s.grade):''))+'</div>'+
-      (s.parent?'<div class="stmeta">Parent: '+esc(s.parent)+(s.contact?' | '+esc(s.contact):'')+'</div>':'')+
-      (s.interests?'<div class="stmeta" style="color:#2D7A50">Interests: '+esc(s.interests)+'</div>':'')+
-      '<div class="stmeta">'+ac+' activities</div></div>'+
-      '<div class="stacts"><button class="bico edit" onclick="openStModal(\''+s.id+'\')">&#9998;</button><button class="bico del" onclick="delSt(\''+s.id+'\')">&#128465;</button></div></div>';
-  }).join('');
-}
-
-function rExp(){popSts();}
-function setGrp(g){grp=g;var m=document.getElementById('tog-mo'),s=document.getElementById('tog-su');if(m)m.classList.toggle('active',g==='month');if(s)s.classList.toggle('active',g==='subject');}
-
-function buildReport(acts,sname,inc) {
-  var mos = (TX[lang] || TX.en).mos; var body = '';
-  if (grp === 'month') {
-    var bm = {}; acts.forEach(function(a) { var k = a.date ? a.date.slice(0, 7) : '?'; if (!bm[k]) bm[k] = []; bm[k].push(a); });
-    Object.keys(bm).sort().reverse().forEach(function(k) { var p = k.split('-'); body += '<h2>' + mos[parseInt(p[1]) - 1] + ' ' + p[0] + '</h2>' + bm[k].map(function(a) { return eRow(a, inc); }).join(''); });
-  } else {
-    var bs = {}; acts.forEach(function(a) { var ss = a.subjects && a.subjects.length ? a.subjects : ['Other']; ss.forEach(function(s) { if (!bs[s]) bs[s] = []; bs[s].push(a); }); });
-    Object.keys(bs).sort().forEach(function(sub) { body += '<h2>' + esc(sub) + '</h2>' + bs[sub].map(function(a) { return eRow(a, inc); }).join(''); });
-  }
-  var date = new Date().toLocaleDateString(lang === 'da' ? 'da-DK' : 'en-US');
-  return '<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>' + esc(sname) + '</title><style>body{font-family:Georgia,serif;max-width:780px;margin:0 auto;padding:32px 24px;color:#1A1A1A;background:#fff}h1{font-size:24px;color:#2D7A50;margin-bottom:4px}h2{font-size:17px;color:#2D7A50;border-bottom:2px solid #2D7A50;padding-bottom:5px;margin:22px 0 10px}.sub{color:#666;font-size:13px;margin-bottom:28px}.entry{margin-bottom:10px;padding:11px;border:1px solid #E5E3DC;border-radius:8px}.et{font-size:14px;font-weight:bold}.em{font-size:11px;color:#666;margin:3px 0}.ed{font-size:12px;margin-top:5px}.tag{display:inline-block;padding:2px 7px;border-radius:20px;font-size:10px;font-weight:bold;margin:2px}@media print{body{padding:20px}}</style></head><body><h1>' + esc(sname) + '</h1><div class="sub">Generated ' + date + ' - ' + acts.length + ' activities</div>' + body + '</body></html>';
-}
-
-function getFilteredActs(){
-  var sid=document.getElementById('exp-st')?document.getElementById('exp-st').value:'';
-  var mo=parseInt(document.getElementById('exp-range')?document.getElementById('exp-range').value:6)||0;
-  var acts=D.activities.slice();
-  if(sid)acts=acts.filter(function(a){return a.studentId===sid;});
-  if(mo>0){var cut=new Date();cut.setMonth(cut.getMonth()-mo);var cs=cut.toISOString().slice(0,10);acts=acts.filter(function(a){return(a.date||'')>=cs;});}
-  return acts.sort(function(a,b){return(a.date||'').localeCompare(b.date||'');});
-}
-
-function doExport(){
-  var sid=document.getElementById('exp-st')?document.getElementById('exp-st').value:'';
-  var inc=document.getElementById('exp-desc')?document.getElementById('exp-desc').checked:true;
-  var acts=getFilteredActs();
-  var st=sid?D.students.filter(function(s){return s.id===sid;})[0]:null;
-  var sname=st?st.name:t('allSts');
-  var html=buildReport(acts,sname,inc);
-  var w=window.open('','_blank');
-  if(w){w.document.write(html);w.document.close();setTimeout(function(){w.print();},600);}
-  else {toast('Please allow popups for PDF export');}
-}
-
-function shareReport(){
-  var sid=document.getElementById('exp-st')?document.getElementById('exp-st').value:'';
-  var inc=document.getElementById('exp-desc')?document.getElementById('exp-desc').checked:true;
-  var acts=getFilteredActs();
-  var st=sid?D.students.filter(function(s){return s.id===sid;})[0]:null;
-  var sname=st?st.name:t('allSts');
-  var html=buildReport(acts,sname,inc);
-  var blob=new Blob([html],{type:'text/html'});
-  var fname='rapport-'+sname.replace(/\s+/g,'-').toLowerCase()+'-'+new Date().toISOString().slice(0,10)+'.html';
-  if(navigator.share){
-    var file=new File([blob],fname,{type:'text/html'});
-    navigator.share({title:sname+' - Rapport',files:[file]}).catch(function(){dlBlob(blob,fname);});
-  }else{dlBlob(blob,fname);toast('Report saved - open it in any browser');}
-}
-function dlBlob(blob,name){var u=URL.createObjectURL(blob);var a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(u);}
-
-function eRow(a,inc){
-  var st=D.students.filter(function(s){return s.id===a.studentId;})[0];
-  var slbl=a.status==='Completed'?t('comp'):a.status==='In Progress'?t('inp'):t('plan');
-  var tags=(a.subjects||[]).map(function(s){return'<span class="tag" style="background:'+sc(s)+'22;color:'+sc(s)+'">'+esc(s)+'</span>';}).join('');
-  return'<div class="entry"><div class="et">'+esc(a.title||'')+'</div><div class="em">'+(a.date?fmtDate(a.date):'')+' - '+slbl+(st?' - '+esc(st.name):'')+'</div><div>'+tags+'</div>'+(inc&&a.description?'<div class="ed">'+esc(a.description)+'</div>':'')+'</div>';
-}
-
-function doBackup(){
-  var d={version:3,exported:new Date().toISOString(),students:D.students,activities:D.activities,pins:D.pins};
-  var blob=new Blob([JSON.stringify(d,null,2)],{type:'application/json'});
-  dlBlob(blob,'homeschool-backup-'+new Date().toISOString().slice(0,10)+'.json');
-  toast('Backup downloaded');
-}
-function doRestore(e){
-  var f=e.target.files[0];if(!f)return;
-  var r=new FileReader();
-  r.onload=function(ev){
-    try{var d=JSON.parse(ev.target.result);
-      if(!confirm('This will replace all current data. Continue?'))return;
-      D.students=d.students||[];D.activities=d.activities||[];D.pins=d.pins||[];
-      save();rCurr();toast('Data restored');
-    }catch(err){toast('Invalid backup file');}
-  };
-  r.readAsText(f);e.target.value='';
-}
-
-function openM(id){document.getElementById(id).classList.add('open');document.body.style.overflow='hidden';}
-function closeM(id){document.getElementById(id).classList.remove('open');document.body.style.overflow='';}
-document.querySelectorAll('.moverlay').forEach(function(o){o.addEventListener('click',function(e){if(e.target===this)closeM(this.id);});});
-
-function openActModal(id){
-  popSts();ePhotos=[];selSubs=[];
+function openActModal(){
+  document.getElementById('act-modal-ttl').innerText=t('createAct');
   document.getElementById('act-id').value='';
-  document.getElementById('act-title').value='';
   document.getElementById('act-st').value='';
+  document.getElementById('act-title').value='';
   document.getElementById('act-status').value='Planned';
   document.getElementById('act-dur').value='1';
-  document.getElementById('act-date').value=new Date().toISOString().slice(0,10);
+  document.getElementById('act-date').value=new Date().toISOString().split('T')[0];
   document.getElementById('act-desc').value='';
-  document.getElementById('pthumbs').innerHTML='';
-  document.getElementById('act-modal-ttl').textContent=id?t('editAct'):t('createAct');
-  if(id){
-    var a=D.activities.filter(function(x){return x.id===id;})[0];
-    if(a){
-      document.getElementById('act-id').value=a.id;
-      document.getElementById('act-title').value=a.title||'';
-      document.getElementById('act-st').value=a.studentId||'';
-      document.getElementById('act-status').value=a.status||'Planned';
-      document.getElementById('act-dur').value=a.duration||1;
-      document.getElementById('act-date').value=a.date||'';
-      document.getElementById('act-desc').value=a.description||'';
-      selSubs=(a.subjects||[]).slice();
-      ePhotos=(a.photos||[]).slice();
-      rPT();
-    }
-  }
-  bldSG();openM('m-act');
+  ePhotos=[]; selSubs=[]; rThumbnails(); rSubGrid();
+  openM('m-act');
 }
-function bldSG(){
-  var all=SUBS.concat(customSubs.filter(function(s){return SUBS.indexOf(s)<0;}));
-  document.getElementById('sg').innerHTML=all.map(function(s){return'<button class="sb'+(selSubs.indexOf(s)>=0?' sel':'')+'" onclick="togSub(\''+s+'\',this)">'+esc(s)+'</button>';}).join('');
+
+function rSubGrid(){
+  var html='';
+  SUBS.concat(customSubs).forEach(function(s){
+    var sel=selSubs.includes(s)?'sel':'';
+    html+=`<div class="sb ${sel}" onclick="togSub('${s}')">${s}</div>`;
+  });
+  document.getElementById('sg').innerHTML=html;
 }
-function togSub(s,btn){
-  var i=selSubs.indexOf(s);
-  if(i>=0){selSubs.splice(i,1);btn.classList.remove('sel');}
-  else{selSubs.push(s);btn.classList.add('sel');}
+function togSub(s){
+  var idx=selSubs.indexOf(s);if(idx>-1)selSubs.splice(idx,1);else selSubs.push(s);
+  rSubGrid();
 }
 function addCS(){
-  var v=document.getElementById('csi').value.trim();if(!v)return;
-  if(customSubs.indexOf(v)<0)customSubs.push(v);
-  if(selSubs.indexOf(v)<0)selSubs.push(v);
-  document.getElementById('csi').value='';bldSG();
+  var v=document.getElementById('csi').value.trim();
+  if(v && !SUBS.includes(v) && !customSubs.includes(v)){customSubs.push(v);selSubs.push(v);rSubGrid();updateSubjectDropdown();}
+  document.getElementById('csi').value='';
 }
 
 function hPhotos(e){
-  var files=Array.from(e.target.files);var count=0;
-  function next(){
-    if(count>=files.length||ePhotos.length>=5){rPT();e.target.value='';return;}
-    var f=files[count++];var r=new FileReader();
+  var files=e.target.files;if(!files)return;
+  for(var i=0;i<files.length;i++){
+    var r=new FileReader();
     r.onload=function(ev){
-      resizeImg(ev.target.result, 800, 800, function(resizedBase64){
-        ePhotos.push(resizedBase64);
-        next();
+      resizeImg(ev.target.value || ev.target.result, 800, 800, function(b64){
+        ePhotos.push(b64);rThumbnails();
       });
     };
-    r.readAsDataURL(f);
+    r.readAsDataURL(files[i]);
   }
-  next();
 }
-function rPT(){document.getElementById('pthumbs').innerHTML=ePhotos.map(function(p,i){return'<div class="pthumb"><img src="'+p+'"><div class="ptdel" onclick="rmP('+i+')">x</div></div>';}).join('');}
-function rmP(i){ePhotos.splice(i,1);rPT();}
+function rThumbnails(){
+  var html='';ePhotos.forEach(function(p,i){html+=`<div class="pthumb"><img src="${p}"><div class="ptdel" onclick="ePhotos.splice(${i},1);rThumbnails()">x</div></div>`;});
+  document.getElementById('pthumbs').innerHTML=html;
+}
+
 function saveAct(){
   var id=document.getElementById('act-id').value;
-  var title=document.getElementById('act-title').value.trim();
-  if(!title){toast('Please enter a title');return;}
-  var act={id:id||uid(),studentId:document.getElementById('act-st').value,title:title,subjects:selSubs.slice(),status:document.getElementById('act-status').value,duration:parseFloat(document.getElementById('act-dur').value)||1,date:document.getElementById('act-date').value,description:document.getElementById('act-desc').value.trim(),photos:ePhotos.slice()};
-  if(id){var idx=D.activities.map(function(a){return a.id;}).indexOf(id);if(idx>=0)D.activities[idx]=act;}
-  else D.activities.unshift(act);
-  save();closeM('m-act');rCurr();toast(id?'Activity updated':'Activity saved');
+  var a=id?D.activities.find(function(x){return x.id===id;}):{};
+  a.studentId=document.getElementById('act-st').value;
+  a.title=document.getElementById('act-title').value.trim()||'Untitled';
+  a.status=document.getElementById('act-status').value;
+  a.duration=parseFloat(document.getElementById('act-dur').value)||1;
+  a.date=document.getElementById('act-date').value;
+  a.description=document.getElementById('act-desc').value.trim();
+  a.subjects=JSON.parse(JSON.stringify(selSubs));
+  a.photos=JSON.parse(JSON.stringify(ePhotos));
+  if(!id){a.id=uid();D.activities.push(a);}
+  save();closeM('m-act');rActs();updateYearDropdown();
 }
-function delAct(id){if(!confirm('Delete this activity?'))return;D.activities=D.activities.filter(function(a){return a.id!==id;});save();rCurr();toast('Deleted');}
+function editAct(id){
+  var a=D.activities.find(function(x){return x.id===id;});if(!a)return;
+  document.getElementById('act-modal-ttl').innerText=t('editAct');
+  document.getElementById('act-id').value=a.id;
+  document.getElementById('act-st').value=a.studentId||'';
+  document.getElementById('act-title').value=a.title;
+  document.getElementById('act-status').value=a.status;
+  document.getElementById('act-dur').value=a.duration;
+  document.getElementById('act-date').value=a.date||'';
+  document.getElementById('act-desc').value=a.description||'';
+  ePhotos=JSON.parse(JSON.stringify(a.photos||[]));
+  selSubs=JSON.parse(JSON.stringify(a.subjects||[]));
+  rThumbnails();rSubGrid();openM('m-act');
+}
+function delAct(id){
+  if(confirm('Delete activity?')){D.activities=D.activities.filter(function(x){return x.id!==id;});save();rActs();updateYearDropdown();}
+}
 
-function openStModal(id){
-  eStPhoto=null;
-  document.getElementById('st-id').value='';document.getElementById('st-name').value='';document.getElementById('st-dob').value='';document.getElementById('st-grade').value='';document.getElementById('st-parent').value='';document.getElementById('st-contact').value='';document.getElementById('st-interests').value='';
-  document.getElementById('st-av').innerHTML='?';document.getElementById('st-av').style.backgroundImage='';
-  document.getElementById('st-modal-ttl').textContent=id?t('editSt'):'Add Student';
-  if(id){
-    var s=D.students.filter(function(x){return x.id===id;})[0];
-    if(s){
-      document.getElementById('st-id').value=s.id;document.getElementById('st-name').value=s.name||'';document.getElementById('st-dob').value=s.dob||'';document.getElementById('st-grade').value=s.grade||'';document.getElementById('st-parent').value=s.parent||'';document.getElementById('st-contact').value=s.contact||'';document.getElementById('st-interests').value=s.interests||'';
-      if(s.photo){eStPhoto=s.photo;document.getElementById('st-av').innerHTML='<img src="'+s.photo+'" style="width:100%;height:100%;object-fit:cover;border-radius:50%">';}
-    }
+function rCal(){
+  var mNames=(TX[lang]||TX.en).mos;
+  document.getElementById('cal-lbl').innerText=mNames[cal.m]+' '+cal.y;
+  
+  var html='';
+  (TX[lang]||TX.en).wds.forEach(function(w){html+=`<div class="cwd">${w}</div>`;});
+  document.getElementById('cwds').innerHTML=html;
+  
+  var first=new Date(cal.y,cal.m,1).getDay();
+  var daysIn=new Date(cal.y,cal.m+1,0).getDate();
+  var daysPrev=new Date(cal.y,cal.m,0).getDate();
+  
+  var dHtml='',tY=new Date().getFullYear(),tM=new Date().getMonth(),tD=new Date().getDate();
+  
+  var start=first===0?6:first-1; // Adjust for Monday start if needed, keeping default grid
+  start = first; 
+
+  for(var i=start-1;i>=0;i--){
+    dHtml+=`<div class="cday om"><div class="cdate">${daysPrev-i}</div></div>`;
   }
-  openM('m-st');
-}
-function hStPhoto(e){
-  var f=e.target.files[0];if(!f)return;
-  var r=new FileReader();
-  r.onload=function(ev){
-    resizeImg(ev.target.result, 300, 300, function(resizedBase64){
-      eStPhoto=resizedBase64;
-      document.getElementById('st-av').innerHTML='<img src="'+eStPhoto+'" style="width:100%;height:100%;object-fit:cover;border-radius:50%">';
+  
+  for(var d=1;d<=daysIn;d++){
+    var curStr=cal.y+'-'+String(cal.m+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
+    var acts=D.activities.filter(function(x){return x.date===curStr;});
+    var isToday=cal.y===tY&&cal.m===tM&&d===tD?'today':'';
+    
+    var pHtml='<div class="cpills">';
+    acts.forEach(function(a){
+      var c=a.subjects&&a.subjects.length>0?sc(a.subjects[0]):'var(--g)';
+      pHtml+=`<div class="cpill" style="background:${c}" onclick="jumpToActivity('${a.id}')">${a.title}</div>`;
     });
-  };
-  r.readAsDataURL(f);e.target.value='';
+    pHtml+='</div>';
+    
+    dHtml+=`<div class="cday ${isToday}"><div class="cdate">${d}</div>${pHtml}</div>`;
+  }
+  
+  var total=start+daysIn;
+  var rem=total%7===0?0:7-(total%7);
+  for(var n=1;n<=rem;n++){
+    dHtml+=`<div class="cday om"><div class="cdate">${n}</div></div>`;
+  }
+  document.getElementById('cdays').innerHTML=dHtml;
 }
-function saveSt(){
-  var id=document.getElementById('st-id').value;var name=document.getElementById('st-name').value.trim();
-  if(!name){toast('Please enter a name');return;}
-  var s={id:id||uid(),name:name,dob:document.getElementById('st-dob').value,grade:document.getElementById('st-grade').value.trim(),parent:document.getElementById('st-parent').value.trim(),contact:document.getElementById('st-contact').value.trim(),interests:document.getElementById('st-interests').value.trim(),photo:eStPhoto};
-  if(id){var i=D.students.map(function(x){return x.id;}).indexOf(id);if(i>=0)D.students[i]=s;}else D.students.push(s);
-  save();closeM('m-st');rSts();popSts();toast(id?'Student updated':'Student added');
-}
+function chMo(v){cal.m+=v;if(cal.m>11){cal.m=0;cal.y++;}if(cal.m<0){cal.m=11;cal.y--;}rCal();}
 
-function delSt(id){
-  if(!confirm('Delete this student?'))return;
-  D.students=D.students.filter(function(s){return s.id!==id;});
-  D.activities.forEach(function(a){ if(a.studentId === id) a.studentId = ''; });
-  D.pins.forEach(function(p){ if(p.studentId === id) p.studentId = ''; });
-  save();rSts();popSts();toast('Student deleted');
+function rMap(){
+  var container = document.getElementById('map-container');
+  if(!window.L){
+    container.innerHTML=`<div class="map-placeholder"><h3>Leaflet Map Offline</h3><p>Check your network / scripts</p></div>`;
+    return;
+  }
+  container.innerHTML='<div id="leaflet-map"></div>';
+  
+  mapObj = L.map('leaflet-map').setView([55.6761, 12.5683], 5);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(mapObj);
+  
+  mapMarkers = [];
+  D.pins.forEach(function(p){
+    if(p.lat && p.lng){
+      var m = L.marker([p.lat, p.lng]).addTo(mapObj);
+      var sName=D.students.find(function(x){return x.id===p.studentId;});
+      sName = sName ? sName.name : '';
+      var timeInfo = (p.fromTime && p.toTime) ? `<br>⏱ ${t('lblStay')}: ${p.fromTime} - ${p.toTime}` : '';
+      m.bindPopup(`<b>${p.title}</b><br>${sName} &bull; ${p.date||''}${timeInfo}<br><p style="font-size:11px;margin-top:4px">${p.description||''}</p>`);
+      mapMarkers.push(m);
+    }
+  });
+  
+  // Render Pin list
+  var list=document.getElementById('pins-list');
+  if(D.pins.length===0){
+    list.innerHTML=`<div class="empty"><div class="empty-ico">&#128205;</div><h3>${t('noPins')}</h3></div>`;
+    return;
+  }
+  
+  var html='';
+  D.pins.forEach(function(p){
+    var sName=D.students.find(function(x){return x.id===p.studentId;});
+    sName = sName ? sName.name : '';
+    var imgHtml=p.photo ? `<img class="pincard-photo" src="${p.photo}">` : '';
+    var timeInfo = (p.fromTime && p.toTime) ? ` &bull; ⏱ ${p.fromTime} - ${p.toTime}` : '';
+    html+=`
+      <div class="pincard">
+        ${imgHtml}
+        <div class="pincard-body">
+          <div style="display:flex;justify-content:between;align-items:flex-start">
+            <div style="flex:1">
+              <div class="pincard-title">${p.title}</div>
+              <div class="pincard-meta">${sName} &bull; ${p.date||''}${timeInfo}</div>
+              <div style="font-size:12px;color:#5A5A5A;margin-top:4px">${p.description||''}</div>
+            </div>
+            <button class="bico del" onclick="delPin('${p.id}')">&#128465;</button>
+          </div>
+        </div>
+      </div>
+    `;
+  });
+  list.innerHTML=html;
 }
 
 function openPinModal(){
-  ePinPhoto=null;popSts();
-  document.getElementById('pin-title').value='';document.getElementById('pin-desc').value='';document.getElementById('pin-date').value=new Date().toISOString().slice(0,10);document.getElementById('pin-pv').innerHTML='';
+  document.getElementById('pin-st').value='';
+  document.getElementById('pin-title').value='';
+  document.getElementById('pin-lat').value='';
+  document.getElementById('pin-lng').value='';
+  document.getElementById('pin-from').value='';
+  document.getElementById('pin-to').value='';
+  document.getElementById('pin-date').value=new Date().toISOString().split('T')[0];
+  document.getElementById('pin-desc').value='';
+  ePinPhoto=null; document.getElementById('pin-pv').innerHTML='';
   openM('m-pin');
 }
 function hPinPhoto(e){
   var f=e.target.files[0];if(!f)return;
   var r=new FileReader();
   r.onload=function(ev){
-    resizeImg(ev.target.result, 800, 800, function(resizedBase64){
-      ePinPhoto=resizedBase64;
-      document.getElementById('pin-pv').innerHTML='<img src="'+ePinPhoto+'" style="width:100%;max-height:110px;object-fit:cover;border-radius:8px">';
+    resizeImg(ev.target.value || ev.target.result, 600, 600, function(b64){
+      ePinPhoto=b64;document.getElementById('pin-pv').innerHTML=`<img src="${b64}" style="width:60px;height:60px;object-fit:cover;border-radius:6px">`;
     });
   };
-  r.readAsDataURL(f);e.target.value='';
+  r.readAsDataURL(f);
 }
 function savePin(){
-  var title=document.getElementById('pin-title').value.trim();if(!title){toast('Please enter a place name');return;}
-  var lat=parseFloat(document.getElementById('pin-lat').value);var lng=parseFloat(document.getElementById('pin-lng').value);
-  var p={id:uid(),studentId:document.getElementById('pin-st').value,title:title,lat:isNaN(lat)?null:lat,lng:isNaN(lng)?null:lng,date:document.getElementById('pin-date').value,description:document.getElementById('pin-desc').value.trim(),photo:ePinPhoto};
-  D.pins.push(p);save();closeM('m-pin');if(page==='map')rMap();else rPinsList();toast('Pin added');
+  var p={
+    id:uid(),
+    studentId:document.getElementById('pin-st').value,
+    title:document.getElementById('pin-title').value.trim()||'Pinned Place',
+    lat:parseFloat(document.getElementById('pin-lat').value),
+    lng:parseFloat(document.getElementById('pin-lng').value),
+    fromTime:document.getElementById('pin-from').value,
+    toTime:document.getElementById('pin-to').value,
+    date:document.getElementById('pin-date').value,
+    description:document.getElementById('pin-desc').value.trim(),
+    photo:ePinPhoto
+  };
+  if(!p.lat||!p.lng){alert('Please enter layout values (Lat/Lng)');return;}
+  D.pins.push(p);save();closeM('m-pin');rMap();
 }
-function delPin(id){if(!confirm('Delete this pin?'))return;D.pins=D.pins.filter(function(p){return p.id!==id;});save();rMap();toast('Pin deleted');}
+function delPin(id){
+  if(confirm('Delete pin?')){D.pins=D.pins.filter(function(x){return x.id!==id;});save();rMap();}
+}
 
-function toast(msg){var e=document.querySelector('.toast');if(e)e.parentNode.removeChild(e);var el=document.createElement('div');el.className='toast';el.textContent=msg;document.body.appendChild(el);setTimeout(function(){if(el.parentNode)el.parentNode.removeChild(el);},2500);}
+function rSts(){
+  var list=document.getElementById('st-list');
+  if(D.students.length===0){
+    list.innerHTML=`<div class="empty"><div class="empty-ico">&#128101;</div><h3>${t('noSts')}</h3></div>`;
+    return;
+  }
+  var html='';
+  D.students.forEach(function(s){
+    var avHtml=s.photo?`<img src="${s.photo}" style="width:100%;height:100%;object-fit:cover">`:'?';
+    html+=`
+      <div class="stcard">
+        <div class="stavatar">${avHtml}</div>
+        <div class="stinfo">
+          <div class="stname">${s.name}</div>
+          <div class="stmeta">${s.grade||''} &bull; ${s.dob||''}</div>
+          <div style="font-size:11px;color:#9A9A9A;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${s.interests||''}</div>
+        </div>
+        <div class="stacts">
+          <button class="bico edit" onclick="editSt('${s.id}')">&#9998;</button>
+          <button class="bico del" onclick="delSt('${s.id}')">&#128465;</button>
+        </div>
+      </div>
+    `;
+  });
+  list.innerHTML=html;
+}
+function openStModal(){
+  document.getElementById('st-modal-ttl').innerText=t('addSt');
+  document.getElementById('st-id').value='';
+  document.getElementById('st-name').value='';
+  document.getElementById('st-dob').value='';
+  document.getElementById('st-grade').value='';
+  document.getElementById('st-parent').value='';
+  document.getElementById('st-contact').value='';
+  document.getElementById('st-interests').value='';
+  eStPhoto=null;var av=document.getElementById('st-av');av.innerHTML='?';av.style.background='#E8F5EE';
+  openM('m-st');
+}
+function hStPhoto(e){
+  var f=e.target.files[0];if(!f)return;
+  var r=new FileReader(); r.onload=function(ev){
+    resizeImg(ev.target.value || ev.target.result, 300, 300, function(b64){
+      eStPhoto=b64;var av=document.getElementById('st-av');
+      av.innerHTML=`<img src="${b64}" style="width:100%;height:100%;object-fit:cover">`;
+    });
+  };
+  r.readAsDataURL(f);
+}
+function saveSt(){
+  var id=document.getElementById('st-id').value;
+  var s=id?D.students.find(function(x){return x.id===id;}):{};
+  s.name=document.getElementById('st-name').value.trim()||'New Student';
+  s.dob=document.getElementById('st-dob').value;
+  s.grade=document.getElementById('st-grade').value.trim();
+  s.parent=document.getElementById('st-parent').value.trim();
+  s.contact=document.getElementById('st-contact').value.trim();
+  s.interests=document.getElementById('st-interests').value.trim();
+  if(eStPhoto)s.photo=eStPhoto;
+  if(!id){s.id=uid();D.students.push(s);}
+  save();closeM('m-st');rSts();updateStudentDropdowns();
+}
+function editSt(id){
+  var s=D.students.find(function(x){return x.id===id;});if(!s)return;
+  document.getElementById('st-modal-ttl').innerText=t('editSt');
+  document.getElementById('st-id').value=s.id;
+  document.getElementById('st-name').value=s.name;
+  document.getElementById('st-dob').value=s.dob||'';
+  document.getElementById('st-grade').value=s.grade||'';
+  document.getElementById('st-parent').value=s.parent||'';
+  document.getElementById('st-contact').value=s.contact||'';
+  document.getElementById('st-interests').value=s.interests||'';
+  eStPhoto=s.photo||null;
+  var av=document.getElementById('st-av');
+  if(s.photo)av.innerHTML=`<img src="${s.photo}" style="width:100%;height:100%;object-fit:cover">`;else av.innerHTML='?';
+  openM('m-st');
+}
+function delSt(id){
+  if(confirm('Delete student and profiles?')){D.students=D.students.filter(function(x){return x.id!==id;});save();rSts();updateStudentDropdowns();}
+}
 
-// INIT
+function rExp(){}
+function setGrp(g){grp=g;document.getElementById('tog-mo').classList.toggle('active',g==='month');document.getElementById('tog-su').classList.toggle('active',g==='subject');}
+function doBackup(){
+  var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(D));
+  var downloadAnchor = document.createElement('a');
+  downloadAnchor.setAttribute("href", dataStr);
+  downloadAnchor.setAttribute("download", "homeschool_journal_backup.json");
+  document.body.appendChild(downloadAnchor);
+  downloadAnchor.click();
+  downloadAnchor.remove();
+}
+function doRestore(e){
+  var f=e.target.files[0];if(!f)return;
+  var r=new FileReader(); r.onload=function(ev){
+    try{
+      var parsed=JSON.parse(ev.target.value || ev.target.result);
+      if(parsed.activities || parsed.students){
+        D=parsed;save();toast('Backup Restored Successfully!');
+        updateStudentDropdowns();updateYearDropdown();updateSubjectDropdown();rDash();
+      }
+    }catch(err){alert('Invalid backup file');}
+  };
+  r.readAsText(f);
+}
+function doExport(){alert('PDF export requires native platform plugin modules');}
+function shareReport(){alert('Sharing requires file container modules');}
+
+// App Initialization
 load();
-popSts();
-rDash();
-rCal();
+updateStudentDropdowns();
+updateYearDropdown();
+updateSubjectDropdown();
+setL('en'); // Defaults to english, buttons allow switching instantly
 </script>
+</div>
 </body>
 </html>
